@@ -14,7 +14,7 @@ import pytz
 import yaml
 
 help_message = """
-To use, fill out config.yml with your own participants. You can also specify 
+To use, fill out config.yml with your own participants. You can also specify
 DONT-PAIR so that people don't get assigned their significant other.
 
 You'll also need to specify your mail server settings. An example is provided
@@ -42,7 +42,7 @@ Message-Id: {message_id}
 From: {frm}
 To: {to}
 Subject: {subject}
-        
+
 """
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yml")
@@ -68,13 +68,13 @@ class Pair:
 
 
 def parse_yaml(yaml_path=CONFIG_PATH):
-    return yaml.load(open(yaml_path))
+    return yaml.load(open(yaml_path), Loader=yaml.FullLoader)
 
 
 def choose_receiver(giver, receivers):
     choice = random.choice(receivers)
     if choice.name in giver.invalid_matches or giver.name == choice.name:
-        if len(receivers) is 1:
+        if len(receivers) == 1:
             raise Exception("Only one receiver left, try again")
         return choose_receiver(giver, receivers)
     else:
@@ -90,7 +90,7 @@ def create_pairs(g, r):
             receiver = choose_receiver(giver, receivers)
             receivers.remove(receiver)
             pairs.append(Pair(giver, receiver))
-        except:
+        except Exception:
             return create_pairs(g, r)
     return pairs
 
@@ -150,14 +150,14 @@ def main(argv=None):
             print(
                 """
 Test pairings:
-                
+
 %s
-                
+
 To send out emails with new pairings,
 call with the --send argument:
 
     $ python secret_santa.py --send
-            
+
             """
                 % ("\n".join([str(p) for p in pairs]))
             )

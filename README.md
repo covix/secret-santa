@@ -9,8 +9,8 @@ specified.
 Dependencies
 ------------
 
-pytz
-pyyaml
+    pytz
+    pyyaml
 
 Usage
 -----
